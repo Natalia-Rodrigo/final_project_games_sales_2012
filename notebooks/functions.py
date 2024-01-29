@@ -40,3 +40,40 @@ def countplot_categorical_variables(df: pd.DataFrame, figsize_height: int = 16, 
             ax.set_title(f'Countplot for {col}')
 
         plt.show()
+
+
+def df_grouping (df: pd.DataFrame, objective: str, sum_func: str):
+    
+    platform_group = df.groupby(['year', objective]).agg({sum_func : 'sum'}).sort_values(sum_func, ascending=False)
+    platform_group = pd.DataFrame(platform_group).reset_index()
+    return platform_group
+
+def lineplot(df_list: list = None, names_list: list = None, objective: str = None, width: int = 30, height: int = 5, x:str = 'year', y: str = 'global'):
+    for elem, name in zip(df_list, names_list):
+        fig, ax = plt.subplots(figsize=(width, height))
+        sns.lineplot(data = elem, x = x, y = y, hue = objective)
+        plt.title(f'{name} sales through the years')
+        plt.show()
+
+def barplot(df_list: list = None, names_list: list = None, objective: str = None, width: int = 30, height: int = 5, y: str = 'global', palette: str = 'light:#5A9'):
+    for elem, name in zip(df_list, names_list):
+        fig, ax = plt.subplots(figsize=(width, height))
+        sns.barplot(data = elem, x = objective, y = y, hue = objective, palette = palette)
+        plt.title(f'{name}  Top-selling')
+        plt.xticks(rotation=45)
+        plt.show()
+
+def cont_discr_df(df: pd.DataFrame, num: int = 36):
+    "This function takes as input a dataframe only with numerical variables and nºunique variables -> to discriminate between continuous and discrete variables,returning two different dataframes with each type of variable"
+
+    cont_col_list = []
+    discr_col_list = []
+
+    for col in df:
+        if len(df[col].unique()) > num:
+            cont_col_list.append(col)
+        else:
+            discr_col_list.append(col)
+    continuous_variables = df[cont_col_list].copy()
+    discrete_variables = df[discr_col_list].copy()
+    return continuous_variables, discrete_variables
