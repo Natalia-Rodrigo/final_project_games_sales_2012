@@ -62,18 +62,3 @@ def barplot(df_list: list = None, names_list: list = None, objective: str = None
         plt.title(f'{name}  Top-selling')
         plt.xticks(rotation=45)
         plt.show()
-
-def cont_discr_df(df: pd.DataFrame, num: int = 36):
-    "This function takes as input a dataframe only with numerical variables and nºunique variables -> to discriminate between continuous and discrete variables,returning two different dataframes with each type of variable"
-
-    cont_col_list = []
-    discr_col_list = []
-
-    for col in df:
-        if len(df[col].unique()) > num:
-            cont_col_list.append(col)
-        else:
-            discr_col_list.append(col)
-    continuous_variables = df[cont_col_list].copy()
-    discrete_variables = df[discr_col_list].copy()
-    return continuous_variables, discrete_variables
